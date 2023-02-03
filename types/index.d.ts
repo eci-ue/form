@@ -15,3 +15,5 @@ export declare interface State {
 export declare const form: <T = State>(value: FormOptionValue, config?: string | ModalFuncProps) => Promise<T | undefined>;
 
 export declare const config: (name: string, component: Component) => void
+
+export declare const ui: typeof import("../src/components/form");

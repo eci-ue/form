@@ -14,7 +14,7 @@ import type { ModalFuncProps } from "ant-design-vue";
 interface State {
   [key: string]: any;
 }
-export const form = function<T = State>(items: FormOptionValue, config?: string | ModalFuncProps): Promise<T> {
+export const model = function<T = State>(items: FormOptionValue, config?: string | ModalFuncProps): Promise<T> {
 
   const state = ref<State>({});
   const onUpdate = (value: State) => (state.value = value);

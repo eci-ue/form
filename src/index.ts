@@ -4,5 +4,5 @@
  */
 
 export { config } from "./config";
-export { form } from "./logic/form";
-export { default as ui } from "./components/form";
+export { model } from "./logic/form";
+export { default as Form } from "./components/form";

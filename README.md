@@ -19,7 +19,7 @@ pnpm install @ui/form --registry http://npm.jslion.xyz/
 **使用**
 
 ```
-import { form, ui } from "@ui/form";
+import { Form, model } from "@ui/form";
 ```
 
 ## 案例
@@ -27,7 +27,7 @@ import { form, ui } from "@ui/form";
 **表单模式**
 ```
 <script setup lang="ts">
-import { ui } from "@ui/form";
+import { Form } from "@ui/form";
 import { Input, InputPassword } from "ant-design-vue";
 import type { FormOptionValue } from "@ui/form";
 
@@ -51,7 +51,7 @@ const onSubmit = function(data: object) {
 
 <template>
   <div>
-    <ui :items="items" @submit="onSubmit"></ui>
+    <Form :items="items" @submit="onSubmit"></Form>
   </div>
 </template>
 ```
@@ -59,7 +59,7 @@ const onSubmit = function(data: object) {
 **弹框模式**
 ```
 <script setup lang="ts">
-import { form } from "@ui/form";
+import { model } from "@ui/form";
 import { Input, InputPassword, Button } from "ant-design-vue";
 import type { FormOptionValue } from "@ui/form";
 
@@ -77,7 +77,7 @@ const items: FormOptionValue = [
 ];
 
 const onModel = async function() {
-  const data = await form(items, "用户登录");
+  const data = await model(items, "用户登录");
   if (data) {
     console.log(data);
   }

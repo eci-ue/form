@@ -1,0 +1,53 @@
+.ant-modal-wrap {
+  &.full-modal {
+    .ant-modal {
+      max-width: 100%;
+      top: 0;
+      padding-bottom: 0;
+      margin: 0;
+    }
+    .ant-modal-content {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh);
+    }
+    .ant-modal-body {
+      flex: 1;
+    }
+
+    .ant-modal-confirm-body-wrapper,
+    .ant-modal-confirm-body,
+    .ant-modal-confirm-content {
+      @apply h-full;
+    }
+  }
+
+
+  &.failure {
+    .ant-modal-body {
+      @apply pr-0;
+    }
+  }
+  .message-input {
+    .ant-modal-body {
+      @apply p-0;
+    }
+    .ant-modal-confirm-content {
+      @apply p-0 m-0;
+    }
+    .ant-modal-confirm-title {
+      @apply text-black text-base leading-6;
+      @apply block py-4 px-6 rounded-sm;
+      @apply border-b border-solid;
+      border-color: #f0f0f0;
+    }
+    .ant-modal-confirm-btns {
+      @apply hidden;
+    }
+  }
+  .ant-modal-content {
+    .ant-modal-footer {
+      @apply text-center;
+    }
+  }
+}

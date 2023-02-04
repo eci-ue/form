@@ -115,7 +115,7 @@ disabled | boolean | 否 | 是否禁用
 from | boolean | 否 | 是否已表单形式渲染，默认为 true
 lable | string | 否 | 表单字段文本
 value | string、number、string[]、number[] | 否 | 单个表单元素默认值
-rules | RuleObject | RuleObject[] | 否 | 校验规则
+rules | RuleObject、 RuleObject[] | 否 | 校验规则
 meta | FormItemMeta | 否 | 其余附加配置
 component | Component、string | 是 | 表单组件
 className | string | 否 | class 内容

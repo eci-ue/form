@@ -91,6 +91,22 @@ const onModel = async function() {
 </template>
 ```
 
+**Config**
+```
+import { config, model } from "@ui/form";
+import { Input } from "ant-design-vue";
+// 配置组件别名
+config("text", Input);
+
+model([
+  {
+    key: "name",
+    component: "text", // 使用别名
+  }
+]);
+
+```
+
 ## FormItemMeta 配置
 名称 | 类型 | 是否必填 |描述
 -- | -- | -- | -- 

@@ -7,7 +7,7 @@ import _ from "lodash-es";
 import { Comp } from "../config";
 import { useValidate } from "src/utils";
 import safeSet from "@fengqiaogang/safe-set";
-import { Form, FormItem, Button, Space, Divider } from "ant-design-vue";
+import { Form, FormItem, Button, Space, Divider, Input } from "ant-design-vue";
 import { PropType, h as createElement, defineComponent, toRaw, computed, ref } from "vue";
 
 import type { Component } from "vue";
@@ -28,28 +28,31 @@ const initData = function(data: FormState = {}, form: FormOptionValue) {
   return data;
 }
 
-const getComp = function(item: FormItemData, formState: FormState) {
-  const props = _.assign({ state: formState }, _.pick(item, ["meta", "disabled"]));
+const getComp = function(item: FormItemData, state: FormState, change: (value: FormState) => void) {
+  const props = { state, ..._.pick(item, ["meta", "disabled"]) };
+  const onUpdate = function(value: FormState) {
+    change({ ...toRaw(state), ...value });
+  }
+  const onChange = function(value: string | number | Array<string | number>) {
+    if (item.key) {
+      onUpdate({ [item.key]: value });
+    }
+  };
   if (item.key) {
     safeSet(props, "meta.key", item.key);
-    const value = formState[item.key];
-    const onChange = function(text: string | string[]) {
-      formState[item.key!] = text;
-      return false;
-    };
-    _.assign(props, { value, onChange });
+    _.assign(props, { value: state[item.key] });
   }
-  const onUpdate = function(value: FormState) {
-    _.assign(formState, toRaw(value));
-  };
-  _.assign(props, { "onUpdate:state": onUpdate });
-  if (typeof item.component === "string") {
-    const value = Comp.get(item.component);
-    if (value) {
-      return createElement(value, props);
+  _.assign(props, { "onUpdate:state": onUpdate, onChange });
+  if (item.component) {
+    if (typeof item.component === "string") {
+      const value = Comp.get(item.component);
+      if (value) {
+        return createElement(value, props);
+      }
     }
+    return createElement(item.component as any, props);
   }
-  return createElement(item.component as any, props);
+  return createElement(Input, props);
 }
 
 const cols = [
@@ -104,13 +107,10 @@ export default defineComponent({
   setup (props: Props<FormState, Layout>, { expose, slots, emit }) {
     const { formRef, validate } = useValidate();
     const state = ref<FormState>(initData(props.value, props.items));
-    const formState = computed<FormState>({
-      get: () => state,
-      set: (value: FormState) => {
-        state.value = value;
-        emit("update:value", toRaw(value));
-      }
-    });
+    const onStateChange = function(value: FormState) {
+      state.value = value;
+      emit("update:value", toRaw(value));
+    };
 
     const config = computed<ModalFuncProps>(function() {
       return _.assign({
@@ -181,17 +181,17 @@ export default defineComponent({
           }
           if (data.from === false) {
             const opt = { "class": className };
-            return createElement("div", opt, getComp(data, formState));
+            return createElement("div", opt, getComp(data, state.value, onStateChange));
           } else {
             const opt = { "class": className, name: data.key, rules: data.rules };
-            const slots = { label, default: getComp(data, formState) };
+            const slots = { label, default: getComp(data, state.value, onStateChange) };
             return createElement(FormItem, opt, slots);
           }
         }
       }
       const className = props.class ? props.class : ["px-6", "py-3", "first:pt-6"];
       return (<div class={ className }>
-        <Form ref={ formRef } layout={ props.layout as Layout } model={ formState }>
+        <Form ref={ formRef } layout={ props.layout as Layout } model={ state.value }>
           { renderForm(props.items) }
           { props.buttons && getButtons() }
         </Form>

@@ -20,16 +20,20 @@ export const model = function<T = State>(items: FormOptionValue, config?: string
   const onUpdate = (value: State) => (state.value = value);
 
   return new Promise<T>(function(resolve) {
-    const option: ModalFuncProps = Object.assign(config ? (_.isString(config) ? { title: config } : config) : {}, {
+    const opt = config ? (_.isString(config) ? { title: config } : config) : {};
+    const option: ModalFuncProps = Object.assign({ ...opt }, {
       onCancel: () => {
+        if (opt.onCancel) {
+          opt.onCancel();
+        }
         resolve(void 0 as T);
       },
       onOk: (value?: State) => {
-        if (value) {
-          resolve(value as T);
-        } else {
-          resolve(toRaw(state.value) as T);
+        const temp = value || toRaw(state.value);
+        if (opt.onOk) {
+          opt.onOk(temp);
         }
+        resolve(temp as T);
       },
     });
     confirm<Component, T, object>(UiForm, option, {

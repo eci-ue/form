@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@fengqiaogang/safe-set": "^0.1.2",
-    "@ui/model": "^0.1.0"
+    "@ui/model": "^0.1.3"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.6",

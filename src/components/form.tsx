@@ -7,7 +7,7 @@ import _ from "lodash-es";
 import { Comp } from "../config";
 import { useValidate } from "src/utils";
 import safeSet from "@fengqiaogang/safe-set";
-import { Form, FormItem, Button, Space, Divider, Input } from "ant-design-vue";
+import { Form, FormItem, Button, Space, Input } from "ant-design-vue";
 import { PropType, h as createElement, defineComponent, toRaw, computed, ref } from "vue";
 
 import type { Component } from "vue";

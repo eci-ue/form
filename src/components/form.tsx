@@ -4,20 +4,18 @@
  */
 
 import _ from "lodash-es";
-import { Comp } from "../config";
+import { render } from "./render";
 import { useValidate } from "src/utils";
 import safeSet from "@fengqiaogang/safe-set";
-import safeGet from "@fengqiaogang/safe-get";
-import { Form, FormItem, Button, Space, Input, Col, Row } from "ant-design-vue";
-import { PropType, h as createElement, defineComponent, toRaw, computed, ref } from "vue";
+import { Form, Button, Space } from "ant-design-vue";
+import { PropType, defineComponent, toRaw, computed, ref } from "vue";
 
 import type { Component } from "vue";
 import type { ModalFuncProps } from "ant-design-vue";
-import type { FormItemData, FormOptionValue, Props } from "types/form";
+import type { FormOptionValue, FormState, Props } from "types/form";
 
-interface FormState {
-  [key: string]: any;
-}
+
+
 
 // 初始化表达数据
 const initData = function(form: FormOptionValue) {
@@ -30,38 +28,6 @@ const initData = function(form: FormOptionValue) {
   return data;
 }
 
-const getComp = function(item: FormItemData, state: FormState, change: (value: FormState) => void) {
-  const props = { state, ..._.pick(item, ["meta", "disabled"]) };
-  const onUpdate = function(value: FormState) {
-    change({ ...toRaw(state), ...value });
-  }
-  const onChange = function(value: string | number | Array<string | number>) {
-    if (item.key) {
-      if (typeof value === "object" && !Array.isArray(value)) {
-        const target = safeGet<HTMLInputElement>(value, "target");
-        onUpdate({ [item.key]: safeGet<string>(target, "value") || "" });
-      } else {
-        onUpdate({ [item.key]: value });
-      }
-    }
-  };
-  if (item.key) {
-    safeSet(props, "meta.key", item.key);
-    const value = safeGet<any>(state, item.key) || void 0;
-    _.assign(props, { value });
-  }
-  _.assign(props, { "onUpdate:state": onUpdate, onChange });
-  if (item.component) {
-    if (typeof item.component === "string") {
-      const value = Comp.get(item.component);
-      if (value) {
-        return createElement(value, props);
-      }
-    }
-    return createElement(item.component as any, props);
-  }
-  return createElement(Input, props);
-}
 
 enum Layout {
   horizontal = "horizontal",
@@ -150,51 +116,14 @@ export default defineComponent({
     };
 
     return () => {
-      const renderForm = function(value: FormOptionValue): Component | undefined {
-        if (_.isArray(value)) {
-          return (<div>
-            <Row gutter={ 24 }>
-              {
-                _.map(value as FormItemData[], (item: FormItemData) =>{
-                  const span = Math.ceil(24 / _.size(value));
-                  if (_.isArray(item)) {
-                    return (<Col span={ span }>{ renderForm(_.flatten(item)) }</Col>);
-                  }
-                  return <Col span={ span }>{ renderForm(item) }</Col>;
-                })
-              }
-            </Row>
-          </div>);
-        }
-        const data = value as FormItemData;
-        if (data) {
-          let label;
-          const className: string[] = [];
-          if (data.className && _.isString(data.className)) {
-            className.push(data.className);
+      return (<div class={ props.class }>
+        <Form ref={ formRef } layout={ props.layout as Layout } model={ state.value }>
+          {
+            _.map(_.compact(_.concat(props.items)), function(value: FormOptionValue) {
+              return render(value, state.value, onStateChange);
+            })
           }
-          if (data.className && _.isArray(data.className)) {
-            className.push(...data.className);
-          }
-          if (_.isNil(data.lable) === false) {
-            label = data.lable ? data.lable : (<span>&nbsp;</span>);
-          }
-          if (data.from === false) {
-            const opt = { "class": className };
-            return createElement("div", opt, getComp(data, state.value, onStateChange));
-          } else {
-            const opt = { "class": className, name: data.key, rules: data.rules };
-            const slots = { label, default: getComp(data, state.value, onStateChange) };
-            return createElement(FormItem, opt, slots);
-          }
-        }
-      }
-      return (<div>
-        <div class={ props.class }>
-          <Form ref={ formRef } layout={ props.layout as Layout } model={ state.value }>
-            { renderForm(props.items) }
-          </Form>
-        </div>
+        </Form>
         { props.buttons && getButtons() }
       </div>);
     };

@@ -3,6 +3,9 @@ import type { Component } from "vue";
 import type { ModalFuncProps } from "ant-design-vue";
 import type { RuleObject } from "ant-design-vue/lib/form/interface";
 
+export interface FormState {
+  [key: string]: any;
+}
 
 export interface Props<State, Layout> {
   value: State;

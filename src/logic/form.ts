@@ -40,6 +40,7 @@ export const model = function<T = State>(items: FormOptionValue, config?: string
       items,
       value: state.value,
       "onUpdate:value": onUpdate,
+      style: { paddingTop: "12px" }
     });
   });
 }

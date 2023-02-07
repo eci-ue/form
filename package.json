@@ -1,7 +1,7 @@
 {
   "name": "@ui/form",
   "private": false,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "types": "types/index.d.ts",
   "license": "MIT",
@@ -29,7 +29,7 @@
   "dependencies": {
     "@fengqiaogang/safe-get": "^0.1.1",
     "@fengqiaogang/safe-set": "^0.1.2",
-    "@ui/model": "^0.1.4"
+    "@ui/model": "^0.1.5"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.6",

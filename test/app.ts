@@ -8,6 +8,8 @@ import { createApp as create } from "vue";
 
 import "ant-design-vue/dist/antd.css";
 
+import "@ui/model/dist/index.css";
+
 import type { App } from "vue";
 
 function App() {

@@ -1,12 +1,13 @@
 {
   "name": "@ui/form",
   "private": false,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "types": "types/index.d.ts",
   "license": "MIT",
   "main": "dist/form",
   "scripts": {
+    "test": "vite --clearScreen --port 3000",
     "build": "vue-tsc && vite build"
   },
   "keywords": [
@@ -26,6 +27,7 @@
     "url": "git+https://github.com/eci-ui/model.git"
   },
   "dependencies": {
+    "@fengqiaogang/safe-get": "^0.1.1",
     "@fengqiaogang/safe-set": "^0.1.2",
     "@ui/model": "^0.1.4"
   },

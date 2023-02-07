@@ -16,13 +16,17 @@
     "experimentalDecorators": true,
     "paths": {
       "src/*": ["./src/*"],
+      "test/*": ["./test/*"],
       "types/*": ["./types/*"]
     }
   },
   "include": [
     "src/**/*.ts", 
     "src/**/*.tsx",
+    "test/**/*.ts",
+    "test/**/*.tsx",
     "types/*.ts",
+    "types/*..dts",
   ],
   "references": [
     { "path": "./tsconfig.node.json" }

@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@fengqiaogang/safe-get': ^0.1.1
   '@fengqiaogang/safe-set': ^0.1.2
   '@types/lodash-es': ^4.17.6
   '@types/node': ^18.8.4
@@ -17,6 +18,7 @@ specifiers:
   vue-tsc: ^1.0.24
 
 dependencies:
+  '@fengqiaogang/safe-get': 0.1.1
   '@fengqiaogang/safe-set': 0.1.2
   '@ui/model': 0.1.4
 
@@ -574,6 +576,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@fengqiaogang/safe-get/0.1.1:
+    resolution: {integrity: sha512-BFXKNgqpHHRuQC+/WzxcTq8iR8G5H1VXUK75H3ppog3I7K+cU928slOC6TaNdUoDmrrry3S2V1VsiEWVNm6rNA==}
+    dev: false
 
   /@fengqiaogang/safe-set/0.1.2:
     resolution: {integrity: sha512-nFOIGo080MkJzpgtMW0nmwLo6cD2eO1gTEmdy5DAIYhJDjbGCZvsfYKXTdHEi7Ww7IZktEMJd/yKLMAtTCk6Jw==}

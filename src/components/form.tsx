@@ -7,7 +7,8 @@ import _ from "lodash-es";
 import { Comp } from "../config";
 import { useValidate } from "src/utils";
 import safeSet from "@fengqiaogang/safe-set";
-import { Form, FormItem, Button, Space, Input } from "ant-design-vue";
+import safeGet from "@fengqiaogang/safe-get";
+import { Form, FormItem, Button, Space, Input, Col, Row } from "ant-design-vue";
 import { PropType, h as createElement, defineComponent, toRaw, computed, ref } from "vue";
 
 import type { Component } from "vue";
@@ -19,7 +20,8 @@ interface FormState {
 }
 
 // 初始化表达数据
-const initData = function(data: FormState = {}, form: FormOptionValue) {
+const initData = function(form: FormOptionValue) {
+  const data: FormState = {};
   for(const item of _.flattenDeep(_.concat(form))) {
     if (item.key) {
       safeSet(data, item.key, item.value);
@@ -35,12 +37,18 @@ const getComp = function(item: FormItemData, state: FormState, change: (value: F
   }
   const onChange = function(value: string | number | Array<string | number>) {
     if (item.key) {
-      onUpdate({ [item.key]: value });
+      if (typeof value === "object" && !Array.isArray(value)) {
+        const target = safeGet<HTMLInputElement>(value, "target");
+        onUpdate({ [item.key]: safeGet<string>(target, "value") || "" });
+      } else {
+        onUpdate({ [item.key]: value });
+      }
     }
   };
   if (item.key) {
     safeSet(props, "meta.key", item.key);
-    _.assign(props, { value: state[item.key] });
+    const value = safeGet<any>(state, item.key) || void 0;
+    _.assign(props, { value });
   }
   _.assign(props, { "onUpdate:state": onUpdate, onChange });
   if (item.component) {
@@ -54,15 +62,6 @@ const getComp = function(item: FormItemData, state: FormState, change: (value: F
   }
   return createElement(Input, props);
 }
-
-const cols = [
-  "",
-  "grid-cols-1",
-  "grid-cols-2", 
-  "grid-cols-3", 
-  "grid-cols-4", 
-  "grid-cols-5"
-];
 
 enum Layout {
   horizontal = "horizontal",
@@ -106,7 +105,7 @@ export default defineComponent({
   },
   setup (props: Props<FormState, Layout>, { expose, slots, emit }) {
     const { formRef, validate } = useValidate();
-    const state = ref<FormState>(initData(props.value, props.items));
+    const state = ref<FormState>({ ...toRaw(props.value || {}), ...initData(props.items) });
     const onStateChange = function(value: FormState) {
       state.value = value;
       emit("update:value", toRaw(value));
@@ -140,7 +139,7 @@ export default defineComponent({
         if (slots.buttons) {
           return slots.buttons();
         }
-        return (<div class="pt-3 text-center">
+        return (<div style={{ "padding-top": "12px", "text-align": "center" }}>
           <Space>
             <Button onClick={ onCancel }>{ config.value.cancelText }</Button>
             <Button type="primary" onClick={onClick}>{ config.value.okText }</Button>
@@ -153,19 +152,19 @@ export default defineComponent({
     return () => {
       const renderForm = function(value: FormOptionValue): Component | undefined {
         if (_.isArray(value)) {
-          return (<>
-            {
-              _.map(value as FormItemData[], (item: FormItemData) =>{
-                if (_.isArray(item)) {
-                  const className = ["grid", "gap-x-8", cols[_.size(item)]];
-                  return (<div class={ className }>
-                    { renderForm(_.flatten(item)) }
-                  </div>);
-                }
-                return renderForm(item);
-              })
-            }
-          </>);
+          return (<div>
+            <Row gutter={ 24 }>
+              {
+                _.map(value as FormItemData[], (item: FormItemData) =>{
+                  const span = Math.ceil(24 / _.size(value));
+                  if (_.isArray(item)) {
+                    return (<Col span={ span }>{ renderForm(_.flatten(item)) }</Col>);
+                  }
+                  return <Col span={ span }>{ renderForm(item) }</Col>;
+                })
+              }
+            </Row>
+          </div>);
         }
         const data = value as FormItemData;
         if (data) {
@@ -190,9 +189,8 @@ export default defineComponent({
           }
         }
       }
-      const className = props.class ? props.class : ["px-6", "py-3", "first:pt-6"];
       return (<div>
-        <div class={ className }>
+        <div class={ props.class }>
           <Form ref={ formRef } layout={ props.layout as Layout } model={ state.value }>
             { renderForm(props.items) }
           </Form>

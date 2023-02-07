@@ -28,7 +28,7 @@ export interface FormItemData {
   rules?: RuleObject | RuleObject[];  // 校验规则
   meta?: FormItemMeta;
   className?: string,
-  component: Component | string; // 表单组件
+  component?: Component | string; // 表单组件, 默认 Antd Input
 };
 
 export type FormOptionValue = FormItemData | Array<FormItemData | Array<FormItemData | FormItemData[]>>;

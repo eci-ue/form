@@ -38,7 +38,7 @@ export const model = function<T = State>(items: FormOptionValue, config?: string
     });
     confirm<Component, T, object>(UiForm, option, {
       items,
-      value: state,
+      value: state.value,
       "onUpdate:value": onUpdate,
     });
   });

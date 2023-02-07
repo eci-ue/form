@@ -8,6 +8,7 @@ export default defineConfig({
     extensions: [".ts", ".vue", ".js", ".tsx"],
     alias: {
       "src/": `${path.resolve(__dirname, "src")}/`,
+      "test/": `${path.resolve(__dirname, "test")}/`,
       "types/": `${path.resolve(__dirname, "types")}/`,
     },
   },
@@ -28,7 +29,9 @@ export default defineConfig({
         /lodash/i,
         /vue/i,
         /@ui/,
-        /ant-design-vue/i
+        /ant-design-vue/i,
+        /@fengqiaogang\/safe-set/,
+        /@fengqiaogang\/safe-get/,
       ],
       output: {
         inlineDynamicImports: true

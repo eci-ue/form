@@ -13,7 +13,8 @@
 ## 安装
 
 ```
-pnpm install @ui/form --registry http://npm.jslion.xyz/
+pnpm install @fengqiaogang/safe-get @fengqiaogang/safe-set
+pnpm install @ui/model @ui/form --registry http://npm.jslion.xyz/
 ```
 
 **使用**
@@ -133,7 +134,7 @@ lable | string | 否 | 表单字段文本
 value | string、number、string[]、number[] | 否 | 单个表单元素默认值
 rules | RuleObject、 RuleObject[] | 否 | 校验规则
 meta | FormItemMeta | 否 | 其余附加配置
-component | Component、string | 是 | 表单组件
+component | Component、string | 否 | 表单组件, 默认 Antd Input
 className | string | 否 | class 内容
 
 ```
@@ -144,7 +145,7 @@ interface FormItemData {
   className?: string;
   meta?: FormItemMeta;
   lable?: string | Component;
-  component: Component | string;
+  component?: Component | string;
   rules?: RuleObject | RuleObject[];
   value?: string | number | Array<string | number>;
 };

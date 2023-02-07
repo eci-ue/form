@@ -124,33 +124,34 @@ export default defineComponent({
     };
     const onSubmit = function () {
       return validate(function() {
-        const value = toRaw(state.value);
-        emit("submit", value);
-        return value;
+        return toRaw(state.value);
       });
     }
-    expose({ onSubmit, validate, });
+    const onClick = async function(e: Event) {
+      const value = await onSubmit();
+      if (value) {
+        emit("submit", e, value);
+      }
+    }
+    expose({ onSubmit, validate });
 
     const getButtons = function() {
       if (_.isBoolean(props.buttons)) {
         if (slots.buttons) {
           return slots.buttons();
         }
-        return (<div class="pt-3">
-          <Divider class="m-0" />
-          <div class="pt-3 text-center">
-            <Space>
-              <Button onClick={ onCancel }>{ config.value.cancelText }</Button>
-              <Button type="primary" onClick={onSubmit}>{ config.value.okText }</Button>
-            </Space>
-          </div>
+        return (<div class="pt-3 text-center">
+          <Space>
+            <Button onClick={ onCancel }>{ config.value.cancelText }</Button>
+            <Button type="primary" onClick={onClick}>{ config.value.okText }</Button>
+          </Space>
         </div>);
       }
       return props.buttons;
     };
 
     return () => {
-      const renderForm = function(value: FormOptionValue): any {
+      const renderForm = function(value: FormOptionValue): Component | undefined {
         if (_.isArray(value)) {
           return (<>
             {
@@ -190,11 +191,13 @@ export default defineComponent({
         }
       }
       const className = props.class ? props.class : ["px-6", "py-3", "first:pt-6"];
-      return (<div class={ className }>
-        <Form ref={ formRef } layout={ props.layout as Layout } model={ state.value }>
-          { renderForm(props.items) }
-          { props.buttons && getButtons() }
-        </Form>
+      return (<div>
+        <div class={ className }>
+          <Form ref={ formRef } layout={ props.layout as Layout } model={ state.value }>
+            { renderForm(props.items) }
+          </Form>
+        </div>
+        { props.buttons && getButtons() }
       </div>);
     };
   },

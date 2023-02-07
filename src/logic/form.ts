@@ -24,14 +24,14 @@ export const model = function<T = State>(items: FormOptionValue, config?: string
     const option: ModalFuncProps = Object.assign({ ...opt }, {
       onCancel: () => {
         if (opt.onCancel) {
-          opt.onCancel();
+          return opt.onCancel();
         }
         resolve(void 0 as T);
       },
       onOk: (value?: State) => {
         const temp = value || toRaw(state.value);
         if (opt.onOk) {
-          opt.onOk(temp);
+          return opt.onOk(temp);
         }
         resolve(temp as T);
       },

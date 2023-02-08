@@ -21,10 +21,10 @@
     "email": "svon.me@gmail.com",
     "url": "https://github.com/svonme"
   },
-  "homepage": "https://github.com/eci-ui/model#readme",
+  "homepage": "https://github.com/eci-ue/form#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eci-ui/model.git"
+    "url": "git+https://github.com/eci-ue/form.git"
   },
   "dependencies": {
     "@fengqiaogang/safe-get": "^0.1.1",

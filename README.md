@@ -1,4 +1,4 @@
-<h1 align="center">@ui/form</h1>
+<h1 align="center">@ue/form</h1>
 
 <div align="center">
   <h3>基于 Ant Design 而封装的动态表单</h3>
@@ -14,23 +14,23 @@
 
 ```
 pnpm install @fengqiaogang/safe-get @fengqiaogang/safe-set
-pnpm install @ui/model @ui/form --registry http://npm.jslion.xyz/
+pnpm install @ue/model @ue/form --registry http://npm.jslion.xyz/
 ```
 
 **使用**
 
 ```
-import { Form, model } from "@ui/form";
+import { Form, form } from "@ue/form";
 ```
 
 ## 案例
 
-**表单模式**
+**组件模式**
 ```
 <script setup lang="ts">
-import { Form } from "@ui/form";
+import { Form } from "@ue/form";
 import { Input, InputPassword } from "ant-design-vue";
-import type { FormOptionValue } from "@ui/form";
+import type { FormOptionValue } from "@ue/form/types/props";
 
 const items: FormOptionValue = [
   {
@@ -60,9 +60,9 @@ const onSubmit = function(data: object) {
 **弹框模式**
 ```
 <script setup lang="ts">
-import { model } from "@ui/form";
+import { form } from "@ue/form";
 import { Input, InputPassword, Button } from "ant-design-vue";
-import type { FormOptionValue } from "@ui/form";
+import type { FormOptionValue } from "@ue/form/types/props";
 
 const items: FormOptionValue = [
   {
@@ -78,7 +78,7 @@ const items: FormOptionValue = [
 ];
 
 const onModel = async function() {
-  const data = await model(items, "用户登录");
+  const data = await form(items, "用户登录");
   if (data) {
     console.log(data);
   }
@@ -94,7 +94,7 @@ const onModel = async function() {
 
 **Config**
 ```
-import { config, model } from "@ui/form";
+import { config, model } from "@ue/form";
 import { Input } from "ant-design-vue";
 // 配置组件别名
 config("text", Input);

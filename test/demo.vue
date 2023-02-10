@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { model } from "../src/index";
-import type { FormOptionValue } from "../types/form";
+import { form } from "../src/index";
+import type { FormOptionValue } from "../src/props";
 
 const items: FormOptionValue = [
   {
@@ -21,7 +21,7 @@ const items: FormOptionValue = [
 
 onMounted(() => {
   setTimeout(async function() {
-    const data = await model(items, "测试");
+    const data = await form(items, "测试");
     console.log(data);
   })
 });

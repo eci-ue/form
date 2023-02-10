@@ -6,7 +6,7 @@ import safeGet from "@fengqiaogang/safe-get";
 import { h as createElement, toRaw } from "vue";
 import { FormItem, Col, Row, Input } from "ant-design-vue";
 
-import type { FormOptionValue, FormItemData, FormState } from "types/form";
+import type { FormOptionValue, FormItemData, FormState } from "../props";
 
 type UpdateValue = (value: FormState) => void;
 

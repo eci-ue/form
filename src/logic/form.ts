@@ -4,18 +4,17 @@
  */
 
 import _ from "lodash-es";
-import { confirm } from "@ui/model";
+import { confirm } from "@ue/model";
 import UiForm from "../components/form";
 
 import { Component, ref, toRaw } from "vue";
-import type { FormOptionValue } from "types/form";
+import type { FormOptionValue } from "../props";
 import type { ModalFuncProps } from "ant-design-vue";
 
 interface State {
   [key: string]: any;
 }
-export const model = function<T = State>(items: FormOptionValue, config?: string | ModalFuncProps): Promise<T> {
-
+const model = function<T = State>(items: FormOptionValue, config?: string | ModalFuncProps): Promise<T> {
   const state = ref<State>({});
   const onUpdate = (value: State) => (state.value = value);
 
@@ -44,3 +43,5 @@ export const model = function<T = State>(items: FormOptionValue, config?: string
     });
   });
 }
+
+export default model;

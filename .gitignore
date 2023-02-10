@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+types
+!types/shims-vue.d.ts
 
 # Editor directories and files
 .vscode/*

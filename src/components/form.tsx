@@ -12,7 +12,7 @@ import { PropType, defineComponent, toRaw, computed, ref } from "vue";
 
 import type { Component } from "vue";
 import type { ModalFuncProps } from "ant-design-vue";
-import type { FormOptionValue, FormState, Props } from "types/form";
+import type { FormOptionValue, FormState, Props } from "../props";
 
 
 

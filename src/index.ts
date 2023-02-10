@@ -5,5 +5,5 @@
 
 export { useValidate } from "./utils";
 export { config } from "./config";
-export { model } from "./logic/form";
+export { default as form } from "./logic/form";
 export { default as Form } from "./components/form";

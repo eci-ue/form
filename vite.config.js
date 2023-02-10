@@ -30,7 +30,7 @@ export default defineConfig({
         /vue/i,
         /@ue\/model/i,
         /ant-design-vue/i,
-        /@fengqiaogang\/safe-set/,
+        /@fengqiaogangnpm\/safe-set/,
         /@fengqiaogang\/safe-get/,
       ],
       output: {

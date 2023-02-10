@@ -28,7 +28,7 @@ export default defineConfig({
       external: [
         /lodash/i,
         /vue/i,
-        /@ui/,
+        /@ue\/model/i,
         /ant-design-vue/i,
         /@fengqiaogang\/safe-set/,
         /@fengqiaogang\/safe-get/,

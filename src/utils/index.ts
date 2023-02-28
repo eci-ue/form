@@ -1,6 +1,22 @@
 import { ref } from "vue";
+import safeSet from "./safe/set";
+import safeGet from "./safe/get";
 import type { FormInstance } from "ant-design-vue";
 
+export const safe = {
+  get: safeGet,
+  set: safeSet
+};
+
+export const concat = function<T>(value: T | T[]): T[] {
+  const list: T[] = Array.isArray(value) ? value : [value];
+  return list.filter((item: T) => {
+    if (item || item === 0) {
+      return true;
+    }
+    return false;
+  });
+}
 
 export const useValidate = function() {
   const formRef = ref<FormInstance>();

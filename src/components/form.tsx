@@ -4,24 +4,13 @@
  */
 
 import { render } from "./render";
-import { useValidate } from "src/utils";
-import safeSet from "@fengqiaogang/safe-set";
+import { useValidate, concat, safe } from "../utils/index";
 import { Form, Button, Space } from "ant-design-vue";
 import { PropType, defineComponent, toRaw, computed, ref } from "vue";
 
 import type { Component } from "vue";
 import type { ModalFuncProps } from "ant-design-vue";
 import type { FormOptionValue, FormState, Props } from "../props";
-
-const concat = function<T>(value: T | T[]): T[] {
-  const list: T[] = Array.isArray(value) ? value : [value];
-  return list.filter((item: T) => {
-    if (item || item === 0) {
-      return true;
-    }
-    return false;
-  });
-}
 
 // 初始化表达数据
 const initData = function(form: FormOptionValue) {
@@ -35,7 +24,7 @@ const initData = function(form: FormOptionValue) {
       const value = initData(item.children);
       Object.assign(data, value);
     } else if (item.key) {
-      safeSet(data, item.key, item.value);
+      safe.set(data, item.key, item.value);
     }
   }
   return data;

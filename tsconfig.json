@@ -2,6 +2,8 @@
   "compilerOptions": {
     "outDir": "build",
     "target": "ESNext",
+    "declaration": true,
+    "composite": true,
     "useDefineForClassFields": true,
     "module": "ESNext",
     "moduleResolution": "Node",
@@ -28,7 +30,5 @@
     "types/*.ts",
     "types/*..dts",
   ],
-  "references": [
-    { "path": "./tsconfig.node.json" }
-  ]
+  "exclude": ["node_modules"]
 }

@@ -1,7 +1,6 @@
 
 import { Comp } from "../config";
-import safeSet from "@fengqiaogang/safe-set";
-import safeGet from "@fengqiaogang/safe-get";
+import { concat, safe } from "../utils/index";
 import { h as createElement, toRaw } from "vue";
 import { FormItem, Col, Row, Input } from "ant-design-vue";
 
@@ -18,16 +17,16 @@ const getComp = function(item: FormItemData, state: FormState, callback: UpdateV
   const onChange = function(value: string | number | Array<string | number>) {
     if (item.key) {
       if (typeof value === "object" && !Array.isArray(value)) {
-        const target = safeGet<HTMLInputElement>(value, "target");
-        onUpdate({ [item.key]: safeGet<string>(target, "value") || "" });
+        const target = safe.get<HTMLInputElement>(value, "target");
+        onUpdate({ [item.key]: safe.get<string>(target, "value") || "" });
       } else {
         onUpdate({ [item.key]: value });
       }
     }
   };
   if (item.key) {
-    safeSet(props, "meta.key", item.key);
-    const value = safeGet<any>(state, item.key) || void 0;
+    safe.set(props, "meta.key", item.key);
+    const value = safe.get<any>(state, item.key) || void 0;
     Object.assign(props, { value });
   }
   Object.assign(props, { "onUpdate:state": onUpdate, onChange });
@@ -80,21 +79,21 @@ export const render = function(value: FormOptionValue, state: FormState, onUpdat
       }
     </Row>);
   }
-  if (value && value.children) {
-    const opt = { "class":  ClassName(value.className) };
+  if (value && safe.get(value, "children")) {
+    const opt = { "class":  ClassName(safe.get(value, "className")) };
     const children: VNode[] = [];
-    const list = Array.isArray(value.children) ? value.children : [value.children];
+    const list = concat(safe.get<FormItemData>(value, "children"));
     for (const item of list) {
       const temp = render(item, state, onUpdateValue);
       if (temp) {
-        children.push(temp as VNode);
+        children.push(temp as any);
       }
     }
-    if (value.component) {
-      return createElement(value.component as VNode, opt, children);
+    if (safe.get(value, "component")) {
+      return createElement(safe.get<VNode>(value, "component"), opt, children);
     }
     return createElement("div", opt, children);
   } else if (value) {
-    return formItem(value, state, onUpdateValue);
+    return formItem(value as FormItemData, state, onUpdateValue);
   }
 }

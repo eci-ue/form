@@ -1,5 +1,5 @@
 
-import type { Component } from "vue";
+import type { Component, VNode } from "vue";
 import type { ModalFuncProps } from "ant-design-vue";
 import type { RuleObject } from "ant-design-vue/lib/form/interface";
 
@@ -23,15 +23,26 @@ export interface FormItemMeta {
 }
 
 export interface FormItemData {
-  key?: string; // 键 （非虚拟 dom key 概念）
-  disabled?: boolean; // 是否禁用
-  from?: boolean;     // 是否为表单 默认 true
+  /** 键 （非虚拟 dom key 概念） */
+  key?: string; 
+  /** 是否禁用 */
+  disabled?: boolean;
+  /** 是否为表单 默认 true */
+  from?: boolean;
   lable?: string | Component;
-  value?: string | number | Array<string | number>, // 表单数据
-  rules?: RuleObject | RuleObject[];  // 校验规则
+  /** 表单数据 */
+  value?: string | number | Array<string | number>;
+  /** 校验规则 */
+  rules?: RuleObject | RuleObject[];
+  /** 附加参数 */
   meta?: FormItemMeta;
-  className?: string,
-  component?: Component | string; // 表单组件, 默认 Antd Input
+  className?: string;
+  /** 表单组件, 默认 Antd Input */
+  component?: VNode | Component | string; 
+  /** 启用该属性当前组件不会以表单进行渲染 */
+  children?: FormItemData | FormItemData[];
 };
+
+
 
 export type FormOptionValue = FormItemData | Array<FormItemData | Array<FormItemData | FormItemData[]>>;

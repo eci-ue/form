@@ -3,7 +3,6 @@
  * @author svon.me@gmail.com
  */
 
-import _ from "lodash-es";
 import { render } from "./render";
 import { useValidate } from "src/utils";
 import safeSet from "@fengqiaogang/safe-set";
@@ -14,14 +13,28 @@ import type { Component } from "vue";
 import type { ModalFuncProps } from "ant-design-vue";
 import type { FormOptionValue, FormState, Props } from "../props";
 
-
-
+const concat = function<T>(value: T | T[]): T[] {
+  const list: T[] = Array.isArray(value) ? value : [value];
+  return list.filter((item: T) => {
+    if (item || item === 0) {
+      return true;
+    }
+    return false;
+  });
+}
 
 // 初始化表达数据
 const initData = function(form: FormOptionValue) {
   const data: FormState = {};
-  for(const item of _.flattenDeep(_.concat(form))) {
-    if (item.key) {
+  const list = concat(form);
+  for(const item of list) {
+    if (Array.isArray(item)) {
+      const value = initData(item);
+      Object.assign(data, value);
+    } else if (item.children) {
+      const value = initData(item.children);
+      Object.assign(data, value);
+    } else if (item.key) {
       safeSet(data, item.key, item.value);
     }
   }
@@ -78,7 +91,7 @@ export default defineComponent({
     };
 
     const config = computed<ModalFuncProps>(function() {
-      return _.assign({
+      return Object.assign({
         okText: "Submit",
         cancelText: "Cancel"
       }, props.option);
@@ -101,7 +114,7 @@ export default defineComponent({
     expose({ onSubmit, validate });
 
     const getButtons = function() {
-      if (_.isBoolean(props.buttons)) {
+      if (props.buttons && typeof props.buttons === "boolean") {
         if (slots.buttons) {
           return slots.buttons();
         }
@@ -119,7 +132,7 @@ export default defineComponent({
       return (<div class={ props.class }>
         <Form ref={ formRef } layout={ props.layout as Layout } model={ state.value }>
           {
-            _.map(_.compact(_.concat(props.items)), function(value: FormOptionValue) {
+            concat(props.items).map(function(value: FormOptionValue) {
               return render(value, state.value, onStateChange);
             })
           }

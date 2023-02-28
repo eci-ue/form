@@ -3,7 +3,6 @@
  * @author svon.me@gmail.com
  */
 
-import _ from "lodash-es";
 import { confirm } from "@ue/model";
 import UiForm from "../components/form";
 
@@ -19,7 +18,7 @@ const model = function<T = State>(items: FormOptionValue, config?: string | Moda
   const onUpdate = (value: State) => (state.value = value);
 
   return new Promise<T>(function(resolve) {
-    const opt = config ? (_.isString(config) ? { title: config } : config) : {};
+    const opt = config ? (typeof config === "string" ? { title: config } : config) : {};
     const option: ModalFuncProps = Object.assign({ ...opt }, {
       onCancel: () => {
         if (opt.onCancel) {

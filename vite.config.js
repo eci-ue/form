@@ -26,7 +26,6 @@ export default defineConfig({
     manifest: false,
     rollupOptions: {
       external: [
-        /lodash/i,
         /vue/i,
         /@ue\/model/i,
         /ant-design-vue/i,

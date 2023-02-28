@@ -1,17 +1,17 @@
 
-import _ from "lodash-es";
 import { Comp } from "../config";
 import safeSet from "@fengqiaogang/safe-set";
 import safeGet from "@fengqiaogang/safe-get";
 import { h as createElement, toRaw } from "vue";
 import { FormItem, Col, Row, Input } from "ant-design-vue";
 
+import type { Component, VNode } from "vue";
 import type { FormOptionValue, FormItemData, FormState } from "../props";
 
 type UpdateValue = (value: FormState) => void;
 
 const getComp = function(item: FormItemData, state: FormState, callback: UpdateValue) {
-  const props = { state, ..._.pick(item, ["meta", "disabled"]) };
+  const props = { state, meta: item.meta, disabled: item.disabled };
   const onUpdate = function(value: FormState) {
     callback({ ...toRaw(state), ...value });
   }
@@ -28,9 +28,9 @@ const getComp = function(item: FormItemData, state: FormState, callback: UpdateV
   if (item.key) {
     safeSet(props, "meta.key", item.key);
     const value = safeGet<any>(state, item.key) || void 0;
-    _.assign(props, { value });
+    Object.assign(props, { value });
   }
-  _.assign(props, { "onUpdate:state": onUpdate, onChange });
+  Object.assign(props, { "onUpdate:state": onUpdate, onChange });
   if (item.component) {
     if (typeof item.component === "string") {
       const value = Comp.get(item.component);
@@ -43,16 +43,21 @@ const getComp = function(item: FormItemData, state: FormState, callback: UpdateV
   return createElement(Input, props);
 }
 
+const ClassName = function(value?: string | string[]) {
+  const list: string[] = [];
+  if (value && typeof value === "string") {
+    list.push(value);
+  }
+  if (value && Array.isArray(value)) {
+    list.push(...value);
+  }
+  return list;
+}
+
 const formItem = function(props: FormItemData, state: FormState, onUpdateValue: UpdateValue) {
   let label;
-  const className: string[] = [];
-  if (props.className && typeof props.className) {
-    className.push(props.className);
-  }
-  if (props.className && Array.isArray(props.className)) {
-    className.push(...props.className);
-  }
-  if (_.isNil(props.lable) === false) {
+  const className = ClassName(props.className);
+  if (props.lable || typeof props.lable === "undefined") {
     label = props.lable ? props.lable : (<span>&nbsp;</span>);
   }
   if (props.from === false) {
@@ -65,7 +70,7 @@ const formItem = function(props: FormItemData, state: FormState, onUpdateValue: 
   }
 }
 
-export const render = function(value: FormOptionValue, state: FormState, onUpdateValue: UpdateValue) {
+export const render = function(value: FormOptionValue, state: FormState, onUpdateValue: UpdateValue): VNode | Component | undefined {
   if (value && Array.isArray(value)) {
     return (<Row gutter={ 24 }>
       {
@@ -75,7 +80,21 @@ export const render = function(value: FormOptionValue, state: FormState, onUpdat
       }
     </Row>);
   }
-  if (value) {
+  if (value && value.children) {
+    const opt = { "class":  ClassName(value.className) };
+    const children: VNode[] = [];
+    const list = Array.isArray(value.children) ? value.children : [value.children];
+    for (const item of list) {
+      const temp = render(item, state, onUpdateValue);
+      if (temp) {
+        children.push(temp as VNode);
+      }
+    }
+    if (value.component) {
+      return createElement(value.component as VNode, opt, children);
+    }
+    return createElement("div", opt, children);
+  } else if (value) {
     return formItem(value, state, onUpdateValue);
   }
 }

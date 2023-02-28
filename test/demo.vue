@@ -15,7 +15,23 @@ const items: FormOptionValue = [
     value: "2",
     lable: "D",
     meta: { placeholder: "请输入姓名" },
-  }
+  },
+  {
+    children: [
+      {
+        key: "c",
+        value: "c",
+        lable: "C",
+        meta: { placeholder: "请输入CCCC" },
+      },
+      {
+        key: "d",
+        value: "d",
+        lable: "D",
+        meta: { placeholder: "请输入DDD" },
+      },
+    ]
+  },
 ];
 
 

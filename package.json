@@ -30,15 +30,13 @@
   "dependencies": {
     "@fengqiaogang/safe-get": "^0.1.1",
     "@fengqiaogang/safe-set": "^0.1.2",
-    "@ue/model": "^0.1.1"
+    "@ue/model": "^0.1.2"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.6",
     "@types/node": "^18.8.4",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
     "ant-design-vue": "^3.2.13",
-    "lodash-es": "^4.17.21",
     "ts-node": "^10.9.1",
     "tslib": "^2.4.0",
     "typescript": "^4.6.4",

@@ -1,7 +1,7 @@
 {
   "name": "@ue/form",
   "private": false,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "types": "types/index.d.ts",
   "license": "MIT",
@@ -45,7 +45,6 @@
     "vue-tsc": "^1.0.24"
   },
   "files": [
-    "src/",
     "dist/",
     "types/",
     "style/",

@@ -8,6 +8,10 @@ export const safe = {
   set: safeSet
 };
 
+export const isNil = function(value: any): boolean {
+  return value == null;
+}
+
 export const concat = function<T>(value: T | T[]): T[] {
   const list: T[] = Array.isArray(value) ? value : [value];
   return list.filter((item: T) => {

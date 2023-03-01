@@ -1,6 +1,6 @@
 
 import { Comp } from "../config";
-import { concat, safe } from "../utils/index";
+import { concat, safe, isNil } from "../utils/index";
 import { h as createElement, toRaw } from "vue";
 import { FormItem, Col, Row, Input } from "ant-design-vue";
 
@@ -56,7 +56,7 @@ const ClassName = function(value?: string | string[]) {
 const formItem = function(props: FormItemData, state: FormState, onUpdateValue: UpdateValue) {
   let label;
   const className = ClassName(props.className);
-  if (props.lable || typeof props.lable === "undefined") {
+  if (!isNil(props.lable)) {
     label = props.lable ? props.lable : (<span>&nbsp;</span>);
   }
   if (props.from === false) {
@@ -84,13 +84,16 @@ export const render = function(value: FormOptionValue, state: FormState, onUpdat
     const children: VNode[] = [];
     const list = concat(safe.get<FormItemData>(value, "children"));
     for (const item of list) {
-      const temp = render(item, state, onUpdateValue);
-      if (temp) {
-        children.push(temp as any);
+      if (item) {
+        const temp = render(item, state, onUpdateValue);
+        if (temp) {
+          children.push(temp as any);
+        }
       }
     }
-    if (safe.get(value, "component")) {
-      return createElement(safe.get<VNode>(value, "component"), opt, children);
+    const node = safe.get<VNode>(value, "component");
+    if (node) {
+      return createElement(node, opt, children);
     }
     return createElement("div", opt, children);
   } else if (value) {

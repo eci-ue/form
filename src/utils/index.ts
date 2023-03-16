@@ -1,6 +1,6 @@
 import { ref } from "vue";
-import safeSet from "./safe/set";
-import safeGet from "./safe/get";
+import safeGet from "@fengqiaogang/safe-get";
+import safeSet from "@fengqiaogang/safe-set";
 import type { FormInstance } from "ant-design-vue";
 
 export const safe = {

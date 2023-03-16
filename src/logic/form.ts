@@ -4,7 +4,7 @@
  */
 
 import { confirm } from "@ue/model";
-import UiForm from "../components/form";
+import Form from "../components/form";
 
 import { Component, ref, toRaw } from "vue";
 import type { FormOptionValue } from "../props";
@@ -34,7 +34,7 @@ const model = function<T = State>(items: FormOptionValue, config?: string | Moda
         resolve(temp as T);
       },
     });
-    confirm<Component, T, object>(UiForm, option, {
+    confirm<Component, T, object>(Form, option, {
       items,
       value: state.value,
       "onUpdate:value": onUpdate,

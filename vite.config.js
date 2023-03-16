@@ -29,6 +29,7 @@ export default defineConfig({
         /vue/i,
         /@ue\/model/i,
         /ant-design-vue/i,
+        /@fengqiaogang/i,
       ],
       output: {
         inlineDynamicImports: true

@@ -38,7 +38,7 @@ enum Layout {
 }
 
 export default defineComponent({
-  name: "UiForm",
+  name: "UeForm",
   props: {
     value: {
       type: Object as PropType<FormState>,

@@ -10,7 +10,7 @@
     "test": "vite --clearScreen --port 3000",
     "build": "vite build",
     "postbuild": "npm run types",
-    "types": "vue-tsc --jsx preserve --declaration --noEmit false --emitDeclarationOnly --declarationDir ./types ./src/index"
+    "types": "vue-tsc --jsx preserve --declaration --noEmit false --emitDeclarationOnly --resolveJsonModule true --esModuleInterop --declarationDir ./types ./src/index"
   },
   "keywords": [
     "form",

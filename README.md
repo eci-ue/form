@@ -1,9 +1,9 @@
-<h1 align="center">@ue/form</h1>
+# @ue/form
 
-<div align="center">
-  <h3>基于 Ant Design 而封装的动态表单</h3>
-  <p>简单配置，快速开发</p>
-</div>
+```
+  基于 Ant Design 而封装的动态表单
+  简单配置，快速开发
+```
 
 ## 功能
 
@@ -14,13 +14,13 @@
 
 ```
 pnpm install @fengqiaogang/safe-get @fengqiaogang/safe-set
-pnpm install @ue/model @ue/form --registry http://npm.jslion.xyz/
+pnpm install @ue/form --registry http://npm.jslion.xyz/
 ```
 
 **使用**
 
 ```
-import { Form, form } from "@ue/form";
+import { Form } from "@ue/form";
 ```
 
 ## 案例
@@ -53,41 +53,6 @@ const onSubmit = function(data: object) {
 <template>
   <div>
     <Form :items="items" @submit="onSubmit"></Form>
-  </div>
-</template>
-```
-
-**弹框模式**
-```
-<script setup lang="ts">
-import { form } from "@ue/form";
-import { Input, InputPassword, Button } from "ant-design-vue";
-import type { FormOptionValue } from "@ue/form/types/props";
-
-const items: FormOptionValue = [
-  {
-    key: "name",
-    component: Input,
-    meta: { placeholder: "请输入账号" }
-  },
-  {
-    key: "password",
-    component: InputPassword,
-    meta: { placeholder: "请输入密码" }
-  }
-];
-
-const onModel = async function() {
-  const data = await form(items, "用户登录");
-  if (data) {
-    console.log(data);
-  }
-}
-</script>
-
-<template>
-  <div>
-    <Button @click="onModel">弹框模式表单</Button>
   </div>
 </template>
 ```

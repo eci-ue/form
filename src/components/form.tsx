@@ -3,6 +3,7 @@
  * @author svon.me@gmail.com
  */
 
+import I18n from "@ue/i18n";
 import { render } from "./render";
 import { useValidate, concat, safe } from "../utils/index";
 import { Form, Button, Space } from "ant-design-vue";
@@ -38,7 +39,6 @@ enum Layout {
 }
 
 export default defineComponent({
-  name: "UeForm",
   props: {
     value: {
       type: Object as PropType<FormState>,
@@ -80,9 +80,10 @@ export default defineComponent({
     };
 
     const config = computed<ModalFuncProps>(function() {
+      const i18n = I18n();
       return Object.assign({
-        okText: "Submit",
-        cancelText: "Cancel"
+        okText: i18n.common.button.submit,
+        cancelText: i18n.common.button.cancel
       }, props.option);
     });
 

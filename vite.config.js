@@ -27,7 +27,7 @@ export default defineConfig({
     rollupOptions: {
       external: [
         /vue/i,
-        /@ue\/model/i,
+        /^@ue/i,
         /ant-design-vue/i,
         /@fengqiaogang/i,
       ],

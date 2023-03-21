@@ -4,10 +4,11 @@
  */
 
 import I18n from "@ue/i18n";
+import { Layout } from "./type";
 import { render } from "./render";
-import { useValidate, concat, safe } from "../utils/index";
 import { Form, Button, Space } from "ant-design-vue";
-import { PropType, defineComponent, toRaw, computed, ref } from "vue";
+import { useValidate, concat, safe } from "../utils/index";
+import { PropType, defineComponent, toRaw, ref } from "vue";
 
 import type { Component } from "vue";
 import type { ModalFuncProps } from "ant-design-vue";
@@ -31,12 +32,6 @@ const initData = function(form: FormOptionValue) {
   return data;
 }
 
-
-enum Layout {
-  horizontal = "horizontal",
-  vertical = "vertical",
-  inline = "inline"
-}
 
 export default defineComponent({
   props: {
@@ -79,13 +74,19 @@ export default defineComponent({
       emit("update:value", toRaw(value));
     };
 
-    const config = computed<ModalFuncProps>(function() {
-      const i18n = I18n();
-      return Object.assign({
-        okText: i18n.common.button.submit,
-        cancelText: i18n.common.button.cancel
-      }, props.option);
-    });
+    const config = function() {
+      const tmp = Object.assign({}, props.option || {});
+      if (!tmp.okText || !tmp.cancelText) {
+        const i18n = I18n();
+        if (!tmp.okText) {
+          tmp.okText = i18n.common.button.submit;
+        }
+        if (!tmp.cancelText) {
+          tmp.cancelText = i18n.common.button.cancel;
+        }
+      }
+      return tmp;
+    };
 
     const onCancel = function() {
       emit("cancel");
@@ -108,10 +109,11 @@ export default defineComponent({
         if (slots.buttons) {
           return slots.buttons();
         }
+        const option = config();
         return (<div style={{ "padding-top": "12px", "text-align": "center" }}>
           <Space>
-            <Button onClick={ onCancel }>{ config.value.cancelText }</Button>
-            <Button type="primary" onClick={onClick}>{ config.value.okText }</Button>
+            <Button onClick={ onCancel }>{ option.cancelText }</Button>
+            <Button type="primary" onClick={onClick}>{ option.okText }</Button>
           </Space>
         </div>);
       }

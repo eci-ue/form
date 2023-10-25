@@ -27,9 +27,7 @@ export default defineConfig({
     rollupOptions: {
       external: [
         /vue/i,
-        /^@ue/i,
         /ant-design-vue/i,
-        /@fengqiaogang/i,
       ],
       output: {
         inlineDynamicImports: true

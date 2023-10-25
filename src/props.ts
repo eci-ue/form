@@ -1,5 +1,5 @@
 
-import type { Component, VNode } from "vue";
+import type { Component, VNode, Ref } from "vue";
 import type { ModalFuncProps } from "ant-design-vue";
 import type { RuleObject } from "ant-design-vue/lib/form/interface";
 
@@ -7,10 +7,16 @@ export interface FormState {
   [key: string]: any;
 }
 
+export interface FormOption extends ModalFuncProps{
+  textAlign?: string;
+  divider?: boolean;
+  loading?: Ref<boolean>;
+}
+
 export interface Props<State, Layout> {
   value: State;
   items: FormOptionValue;
-  option?: ModalFuncProps;
+  option: FormOption;
   layout?: Layout | string;
   class?: string;
   buttons?: boolean | Component;

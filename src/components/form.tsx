@@ -3,16 +3,15 @@
  * @author svon.me@gmail.com
  */
 
-import I18n from "@ue/i18n";
 import { Layout } from "./type";
 import { render } from "./render";
-import { Form, Button, Space } from "ant-design-vue";
+import locale from "ant-design-vue/es/locale/en_US";
+import { Form, Button, Space, Divider } from "ant-design-vue";
 import { useValidate, concat, safe } from "../utils/index";
 import { PropType, defineComponent, toRaw, ref } from "vue";
 
-import type { Component } from "vue";
-import type { ModalFuncProps } from "ant-design-vue";
-import type { FormOptionValue, FormState, Props } from "../props";
+import type { Component, StyleValue } from "vue";
+import type { FormOptionValue, FormState, Props, FormOption } from "../props";
 
 // 初始化表达数据
 const initData = function(form: FormOptionValue) {
@@ -46,7 +45,7 @@ export default defineComponent({
       type: [Array, Object] as PropType<FormOptionValue>
     },
     option: {
-      type: Object as PropType<ModalFuncProps>,
+      type: Object as PropType<FormOption>,
       default () {
         return {};
       }
@@ -77,12 +76,11 @@ export default defineComponent({
     const config = function() {
       const tmp = Object.assign({}, props.option || {});
       if (!tmp.okText || !tmp.cancelText) {
-        const i18n = I18n();
         if (!tmp.okText) {
-          tmp.okText = i18n.common.button.submit;
+          tmp.okText = locale.Modal?.okText || "Submit";
         }
         if (!tmp.cancelText) {
-          tmp.cancelText = i18n.common.button.cancel;
+          tmp.cancelText = locale.Modal?.cancelText || "Cancel";
         }
       }
       return tmp;
@@ -110,25 +108,35 @@ export default defineComponent({
           return slots.buttons();
         }
         const option = config();
-        return (<div style={{ "padding-top": "12px", "text-align": "center" }}>
-          <Space>
-            <Button onClick={ onCancel }>{ option.cancelText }</Button>
-            <Button type="primary" onClick={onClick}>{ option.okText }</Button>
-          </Space>
+        const textAlign: string = props.option.textAlign ? props.option.textAlign : "center";
+        const buttonStyle: StyleValue = {
+          "paddingTop": "12px", 
+          "textAlign": textAlign as any
+        }
+        return (<div>
+          { option.divider ? <Divider style="margin: 0;"></Divider> : void 0 }
+          <div style={ buttonStyle }>
+            <Space>
+              <Button { ...option.cancelButtonProps } onClick={ onCancel }>{ option.cancelText }</Button>
+              <Button type="primary" loading={ option.loading?.value } { ...option.okButtonProps } onClick={onClick}>{ option.okText }</Button>
+            </Space>
+          </div>
         </div>);
       }
       return props.buttons;
     };
 
     return () => {
-      return (<div class={ props.class }>
-        <Form ref={ formRef } layout={ props.layout as Layout } model={ state.value }>
-          {
-            concat(props.items).map(function(value: FormOptionValue) {
-              return render(value, state.value, onStateChange);
-            })
-          }
-        </Form>
+      return (<div>
+        <div class={ props.class }>
+          <Form ref={ formRef } layout={ props.layout as Layout } model={ state.value }>
+            {
+              concat(props.items).map(function(value: FormOptionValue) {
+                return render(value, state.value, onStateChange);
+              })
+            }
+          </Form>
+        </div>
         { props.buttons && getButtons() }
       </div>);
     };

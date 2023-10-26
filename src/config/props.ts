@@ -7,7 +7,7 @@ export interface FormState {
   [key: string]: any;
 }
 
-export interface FormOption extends ModalFuncProps{
+export interface FormOption extends ModalFuncProps {
   textAlign?: string;
   divider?: boolean;
   loading?: Ref<boolean>;
@@ -33,7 +33,7 @@ export interface FormItemProps {
 
 export interface FormItemData {
   /** 键 （非虚拟 dom key 概念） */
-  key?: string; 
+  key?: string;
   /** 是否为表单 默认 true */
   from?: boolean;
   label?: string | Component | VNode;
@@ -43,7 +43,7 @@ export interface FormItemData {
   rules?: RuleObject | RuleObject[];
   className?: string;
   /** 表单组件, 默认 Antd Input */
-  component?: VNode | Component | string; 
+  component?: VNode | Component;
   // 传递给 component 的配置参数
   props?: FormItemProps;
   slots?: any;

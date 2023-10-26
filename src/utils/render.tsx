@@ -1,23 +1,22 @@
-import { Comp } from "../config";
-import { concat, isNil } from "../utils/index";
+import { concat, isNil } from "./index";
 import { h as createElement, toRaw } from "vue";
-import { FormItem, Col, Row, Input, SelectOption, Select } from "ant-design-vue";
+import { FormItem, Col, Row, Input } from "ant-design-vue";
 
 import type { Component, VNode } from "vue";
-import type { FormOptionValue, FormItemData, FormState } from "../props";
+import type { FormOptionValue, FormItemData, FormState } from "../config/props";
 
 type UpdateValue = (value: FormState) => void;
 
-const getComp = function(item: FormItemData, state: FormState, callback: UpdateValue) {
+const getComp = function (item: FormItemData, state: FormState, callback: UpdateValue) {
   const props = {};
   if (item.props) {
     Object.assign(props, item.props);
   }
-  const onUpdate = function(value: FormState) {
+  const onUpdate = function (value: FormState) {
     const data = { ...toRaw(state), ...value };
     callback(data);
   }
-  const onChange = function(e: any) {
+  const onChange = function (e: any) {
     if (item.key) {
       let value;
       if (e && e.target) {
@@ -36,18 +35,12 @@ const getComp = function(item: FormItemData, state: FormState, callback: UpdateV
   Object.assign(props, { onChange });
 
   if (item.component) {
-    if (typeof item.component === "string") {
-      const value = Comp.get(item.component);
-      if (value) {
-        return createElement(value, props, item.slots);
-      }
-    }
     return createElement(item.component as VNode, props, item.slots);
   }
   return createElement(Input, props, item.slots);
 }
 
-const ClassName = function(value?: string | string[]) {
+const ClassName = function (value?: string | string[]) {
   const list: string[] = [];
   if (value && typeof value === "string") {
     list.push(value);
@@ -58,7 +51,7 @@ const ClassName = function(value?: string | string[]) {
   return list;
 }
 
-const formItem = function(props: FormItemData, state: FormState, onUpdateValue: UpdateValue) {
+const formItem = function (props: FormItemData, state: FormState, onUpdateValue: UpdateValue) {
   let label;
   const className = ClassName(props.className);
   // @ts-ignore
@@ -76,12 +69,12 @@ const formItem = function(props: FormItemData, state: FormState, onUpdateValue: 
   }
 }
 
-export const render = function(value: FormOptionValue, state: FormState, onUpdateValue: UpdateValue): VNode | Component | undefined {
+export const render = function (value: FormOptionValue, state: FormState, onUpdateValue: UpdateValue): VNode | Component | undefined {
   if (value && Array.isArray(value)) {
-    return (<Row gutter={ 24 }>
+    return (<Row gutter={24}>
       {
         value.map((item: FormOptionValue) => {
-          return (<Col span={ Math.ceil(24 / value.length) }>{ render(item, state, onUpdateValue) }</Col>);
+          return (<Col span={Math.ceil(24 / value.length)}>{render(item, state, onUpdateValue)}</Col>);
         })
       }
     </Row>);
@@ -89,7 +82,7 @@ export const render = function(value: FormOptionValue, state: FormState, onUpdat
   // @ts-ignore
   if (value && value.children) {
     // @ts-ignore
-    const opt = { "class":  ClassName(value.className) };
+    const opt = { "class": ClassName(value.className) };
     const children: VNode[] = [];
     // @ts-ignore
     const list = concat(value.children);

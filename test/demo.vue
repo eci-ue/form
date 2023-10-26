@@ -75,4 +75,4 @@ const onChange = function(data: object) {
 .p-5 {
   padding: 20px;
 }
-</style>
+</style>../src/config/props

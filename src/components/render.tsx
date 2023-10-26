@@ -1,8 +1,7 @@
-
 import { Comp } from "../config";
-import { concat, safe, isNil } from "../utils/index";
+import { concat, isNil } from "../utils/index";
 import { h as createElement, toRaw } from "vue";
-import { FormItem, Col, Row, Input } from "ant-design-vue";
+import { FormItem, Col, Row, Input, SelectOption, Select } from "ant-design-vue";
 
 import type { Component, VNode } from "vue";
 import type { FormOptionValue, FormItemData, FormState } from "../props";
@@ -10,36 +9,42 @@ import type { FormOptionValue, FormItemData, FormState } from "../props";
 type UpdateValue = (value: FormState) => void;
 
 const getComp = function(item: FormItemData, state: FormState, callback: UpdateValue) {
-  const props = { state, meta: item.meta, disabled: item.disabled };
-  const onUpdate = function(value: FormState) {
-    callback({ ...toRaw(state), ...value });
+  const props = {};
+  if (item.props) {
+    Object.assign(props, item.props);
   }
-  const onChange = function(value: string | number | Array<string | number>) {
+  const onUpdate = function(value: FormState) {
+    const data = { ...toRaw(state), ...value };
+    callback(data);
+  }
+  const onChange = function(e: any) {
     if (item.key) {
-      if (typeof value === "object" && !Array.isArray(value)) {
-        const target = safe.get<HTMLInputElement>(value, "target");
-        onUpdate({ [item.key]: safe.get<string>(target, "value") || "" });
+      let value;
+      if (e && e.target) {
+        const target: HTMLInputElement = e.target;
+        value = target.value;
       } else {
-        onUpdate({ [item.key]: value });
+        value = e;
       }
+      onUpdate({ [item.key]: value });
     }
   };
   if (item.key) {
-    safe.set(props, "meta.key", item.key);
-    const value = safe.get<any>(state, item.key) || void 0;
+    const value = state[item.key] || void 0;
     Object.assign(props, { value });
   }
-  Object.assign(props, { "onUpdate:state": onUpdate, onChange });
+  Object.assign(props, { onChange });
+
   if (item.component) {
     if (typeof item.component === "string") {
       const value = Comp.get(item.component);
       if (value) {
-        return createElement(value, props);
+        return createElement(value, props, item.slots);
       }
     }
-    return createElement(item.component as any, props);
+    return createElement(item.component as VNode, props, item.slots);
   }
-  return createElement(Input, props);
+  return createElement(Input, props, item.slots);
 }
 
 const ClassName = function(value?: string | string[]) {
@@ -56,8 +61,10 @@ const ClassName = function(value?: string | string[]) {
 const formItem = function(props: FormItemData, state: FormState, onUpdateValue: UpdateValue) {
   let label;
   const className = ClassName(props.className);
-  if (!isNil(props.lable)) {
-    label = props.lable ? props.lable : (<span>&nbsp;</span>);
+  // @ts-ignore
+  const tmp: string | VNode | Component = props.label || props["lable"];
+  if (!isNil(tmp)) {
+    label = tmp ? tmp : (<span>&nbsp;</span>);
   }
   if (props.from === false) {
     const opt = { "class": className };
@@ -79,10 +86,13 @@ export const render = function(value: FormOptionValue, state: FormState, onUpdat
       }
     </Row>);
   }
-  if (value && safe.get(value, "children")) {
-    const opt = { "class":  ClassName(safe.get(value, "className")) };
+  // @ts-ignore
+  if (value && value.children) {
+    // @ts-ignore
+    const opt = { "class":  ClassName(value.className) };
     const children: VNode[] = [];
-    const list = concat(safe.get<FormItemData>(value, "children"));
+    // @ts-ignore
+    const list = concat(value.children);
     for (const item of list) {
       if (item) {
         const temp = render(item, state, onUpdateValue);
@@ -91,7 +101,8 @@ export const render = function(value: FormOptionValue, state: FormState, onUpdat
         }
       }
     }
-    const node = safe.get<VNode>(value, "component");
+    // @ts-ignore
+    const node = value.component as VNode;
     if (node) {
       return createElement(node, opt, children);
     }

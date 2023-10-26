@@ -69,8 +69,10 @@ export default defineComponent({
     const { formRef, validate } = useValidate();
     const state = ref<FormState>({ ...toRaw(props.value || {}), ...initData(props.items) });
     const onStateChange = function(value: FormState) {
+      const data = { ...value };
       state.value = value;
-      emit("update:value", toRaw(value));
+      emit("update:value", data);
+      emit("change", data);
     };
 
     const config = function() {

@@ -1,45 +1,73 @@
 <script setup lang="ts">
 import { Form } from "../src/index";
-import type { FormOptionValue, FormOption } from "../src/props";
+import { h as createElement, toRaw } from "vue";
+import { Select, SelectOption } from "ant-design-vue";
+import type { FormOptionValue } from "../src/props";
 
 const items: FormOptionValue = [
   {
     key: "age",
     value: "",
-    lable: "A",
+    label: "A",
     rules: {
       required: true,
-      type: "number",
     },
-    meta: { placeholder: "请输入邮箱" },
+    props: { placeholder: "请输入邮箱" },
   },
   {
-    key: "name",
+    key: "mail",
     value: "",
-    meta: { placeholder: "请输入姓名" },
+    label: "邮箱",
+    component: Select,
+    props: { 
+      placeholder: "请选择邮箱",
+      fieldNames: {
+        label: "label",
+        value: "value"
+      }
+    },
+    slots: [
+      createElement(SelectOption, { value: "a", label: "1@a.com" }),
+      createElement(SelectOption, { value: "b", label: "2@a.com"}),
+    ]
   },
   {
     children: [
       {
-        key: "c",
+        key: "name",
         value: "",
-        lable: "C",
-        meta: { placeholder: "请输入CCCC" },
+        label: "用户",
+        component: Select,
+        props: {
+          placeholder: "请选择用户",
+          fieldNames: {
+            label: "label",
+            value: "value"
+          },
+          options: [
+            { label: "张三", value: "a" },
+            { label: "李四", value: "b" },
+          ]
+        }
       },
       {
         key: "d",
         value: "",
-        lable: "D",
-        meta: { placeholder: "请输入DDD" },
+        label: "D",
+        props: { placeholder: "请输入DDD" },
       },
     ]
   },
 ];
+
+const onChange = function(data: object) {
+  console.log(data);
+}
 </script>
 
 <template>
   <div style="padding: 20px;">
-    <Form class="p-5" :items="items"></Form>
+    <Form class="p-5" :items="items" @change.self="onChange"></Form>
   </div>
 </template>
 

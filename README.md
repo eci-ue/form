@@ -59,32 +59,43 @@ const onSubmit = function(data: object) {
 
 **Config**
 ```
-import { config, model } from "@ue/form";
-import { Input } from "ant-design-vue";
-// 配置组件别名
-config("text", Input);
+import * as modal from "@ue/modal";
+import { Select } from "ant-design-vue";
+import { h as createElement } from "vue";
 
-model([
+modal.form([
   {
-    key: "name",
-    component: "text", // 使用别名
+    key: "user",
+    component: Select,
+    props: { 
+      placeholder: "请选择用户",
+      fieldNames: { label: "label", value: "value" },
+    },
+    slots: [
+      createElement(SelectOption, { value: "u001", label: "张三" }),
+      createElement(SelectOption, { value: "u002", label: "李四"}),
+    ]
+  },
+  {
+    key: "mail",
+    component: Select,
+    props: { 
+      placeholder: "请选择邮箱",
+      fieldNames: { label: "label", value: "value" },
+      options: [
+        { value: "zhangsan@mail.com", label: "zhangsan@mail.com" },
+        { value: "lisi@mail.com", label: "lisi@mail.com" },
+      ]
+    },
   }
 ]);
 
 ```
 
-## FormItemMeta 配置
-名称 | 类型 | 是否必填 |描述
--- | -- | -- | -- 
-key | string | 否 | 键， 表单字段 key
-placeholder | string | 否 | 占位符，提示语
+## props 配置
 
-```
-interface FormItemMeta {
-  placeholder?: string;
-  key?: string;
-  [key: string]: any;
-}
+配合 component 使用, props 中的所有数据都将传给 component 对应的组件
+
 ```
 
 
@@ -93,26 +104,13 @@ interface FormItemMeta {
 名称 | 类型 | 是否必填 |描述
 -- | -- | -- | -- 
 key | string | 否 | 键， 表单字段 key
-disabled | boolean | 否 | 是否禁用
 from | boolean | 否 | 是否已表单形式渲染，默认为 true
-lable | string | 否 | 表单字段文本
+label | string | 否 | 表单字段文本
 value | string、number、string[]、number[] | 否 | 单个表单元素默认值
 rules | RuleObject、 RuleObject[] | 否 | 校验规则
-meta | FormItemMeta | 否 | 其余附加配置
 component | Component、string | 否 | 表单组件, 默认 Antd Input
+props | Object | 否 | component 附加配置
+slots | Any | 否 | 以 component slots形式展示 
 className | string | 否 | class 内容
 
-```
-interface FormItemData {
-  key?: string;
-  from?: boolean;
-  disabled?: boolean;
-  className?: string;
-  meta?: FormItemMeta;
-  lable?: string | Component;
-  component?: Component | string;
-  rules?: RuleObject | RuleObject[];
-  value?: string | number | Array<string | number>;
-};
-```
 
